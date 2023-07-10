@@ -1,4 +1,4 @@
-# EX1 :
+# EX3 :
 ### program to determine the largest number of three numbers
 
 
