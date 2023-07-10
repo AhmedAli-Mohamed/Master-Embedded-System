@@ -1,4 +1,4 @@
-# EX1 :
+# EX4 :
 ### program to check if the number is negative or positive
 
 # Solution
