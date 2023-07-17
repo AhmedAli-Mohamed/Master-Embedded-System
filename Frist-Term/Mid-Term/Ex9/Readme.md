@@ -1,5 +1,5 @@
 # Ex9 :
-### function to count the max number of ones between two zeros?
+### function to scan string and swap between words
 # solution :
 ```c
 #include<stdio.h>
