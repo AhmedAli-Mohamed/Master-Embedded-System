@@ -1,0 +1,94 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x08000000         0x00020000         xr
+sram             0x20000000         0x00005000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x08000000       0xa8
+ *(.vectors*)
+ .vectors       0x08000000       0x24 startup.o
+ *(.text)
+ .text          0x08000024        0x8 startup.o
+ .text          0x0800002c       0x7c app.o
+                0x0800002c                main
+ *(.rodata)
+
+.glue_7         0x080000a8        0x0
+ .glue_7        0x080000a8        0x0 linker stubs
+
+.glue_7t        0x080000a8        0x0
+ .glue_7t       0x080000a8        0x0 linker stubs
+
+.vfp11_veneer   0x080000a8        0x0
+ .vfp11_veneer  0x080000a8        0x0 linker stubs
+
+.v4_bx          0x080000a8        0x0
+ .v4_bx         0x080000a8        0x0 linker stubs
+
+.iplt           0x080000a8        0x0
+ .iplt          0x080000a8        0x0 startup.o
+
+.rel.dyn        0x080000a8        0x0
+ .rel.iplt      0x080000a8        0x0 startup.o
+
+.data           0x080000a8        0x0
+ *(.data)
+ .data          0x080000a8        0x0 startup.o
+ .data          0x080000a8        0x0 app.o
+
+.igot.plt       0x080000a8        0x0
+ .igot.plt      0x080000a8        0x0 startup.o
+
+.bss            0x20000000        0x0
+ *(.bss)
+ .bss           0x20000000        0x0 startup.o
+ .bss           0x20000000        0x0 app.o
+LOAD startup.o
+LOAD app.o
+OUTPUT(Lab.elf elf32-littlearm)
+LOAD linker stubs
+
+.ARM.attributes
+                0x00000000       0x2f
+ .ARM.attributes
+                0x00000000       0x21 startup.o
+ .ARM.attributes
+                0x00000021       0x2d app.o
+
+.comment        0x00000000       0x55
+ .comment       0x00000000       0x55 app.o
+                                 0x56 (size before relaxing)
+
+.debug_line     0x00000000       0xb6
+ .debug_line    0x00000000       0x39 startup.o
+ .debug_line    0x00000039       0x7d app.o
+
+.debug_info     0x00000000      0x16c
+ .debug_info    0x00000000       0x26 startup.o
+ .debug_info    0x00000026      0x146 app.o
+
+.debug_abbrev   0x00000000       0xe2
+ .debug_abbrev  0x00000000       0x14 startup.o
+ .debug_abbrev  0x00000014       0xce app.o
+
+.debug_aranges  0x00000000       0x40
+ .debug_aranges
+                0x00000000       0x20 startup.o
+ .debug_aranges
+                0x00000020       0x20 app.o
+
+.debug_str      0x00000000      0x12f
+ .debug_str     0x00000000       0x4a startup.o
+ .debug_str     0x0000004a       0xe5 app.o
+                                0x150 (size before relaxing)
+
+.debug_loc      0x00000000       0x38
+ .debug_loc     0x00000000       0x38 app.o
+
+.debug_frame    0x00000000       0x2c
+ .debug_frame   0x00000000       0x2c app.o
