@@ -1,5 +1,5 @@
 # student DataBase using  LinkedList
-### you can see a tutual explanation of project on https://drive.google.com/drive/folders/10mPLUo8kaPSR8gUEcFm6hbnGnmQgSwfy
+### you can see a tutorial explanation of project on https://drive.google.com/drive/folders/10mPLUo8kaPSR8gUEcFm6hbnGnmQgSwfy
 
 
 ## function used in project :

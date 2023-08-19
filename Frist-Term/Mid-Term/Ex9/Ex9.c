@@ -1,36 +1,46 @@
-#include<stdio.h>
-#include<string.h>
-void rev(char *buf,int len);
-void main()
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void reverse_words(char buf[]);
+void reverse (char begin[],char end []);
+int main()
 {
-    char buf[100];
+    char buf[30];
     gets(buf);
-    rev(buf,strlen(buf));
+    reverse_words(buf);
+    puts(buf);
+    
+    return 0;
+}
+
+void reverse_words(char buf[])
+{
+    char  *begin,*temp;
+    begin=temp=buf;
+    while(*temp)
+    {
+        temp++;
+        if(*temp==NULL)
+        {
+            reverse(begin,temp-1);
+        }
+        else if (*temp==' ')
+        {
+            reverse(begin,temp-1);
+            begin=temp+1;
+        }
+    }
+    reverse(buf,temp-1);
 
 }
-void rev(char *buf,int len)
+
+void reverse (char begin[],char end [])
 {
-    char a[100],b[100],*res;
-    int i,n=0;
-
-   
-   do
+    char temp;
+    while(begin<end)
     {
-        a[n]=buf[n];
-        n++;
-    } while (buf[n]!=' ');
-
-    for(i=0;n<len;i++,n++)
-    {
-        b[i]=buf[n];
+        temp=*begin;
+        *begin++=*end;
+        *end--=temp;
     }
-    b[i]=' ';
-    b[i+1]='\0';
-    res=strcat(b,a);
-   for (i=0;i<=len;i++)
-   {
-    printf("%c",res[i]);
-   }
-
-    
 }
