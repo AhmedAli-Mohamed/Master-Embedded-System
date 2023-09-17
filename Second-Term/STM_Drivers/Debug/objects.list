@@ -1,0 +1,6 @@
+"Src/main.o"
+"Src/syscalls.o"
+"Src/sysmem.o"
+"Startup/startup_stm32f103c6tx.o"
+"stm32f103x6_Drivers/EXTI.o"
+"stm32f103x6_Drivers/GPIO/GPIO.o"

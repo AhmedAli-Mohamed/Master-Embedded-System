@@ -1,0 +1,11 @@
+EXTI.c:32:6:UPDATE_EXTI	24	static
+EXTI.c:162:6:MCAL_EXTI_DEINIT	16	static
+EXTI.c:189:6:MCAL_EXTI_INIT	16	static
+EXTI.c:201:6:MCAL_EXTI_UPDATE	16	static
+EXTI.c:217:6:EXTI0_IRQHandler	8	static
+EXTI.c:222:6:EXTI1_IRQHandler	8	static
+EXTI.c:227:6:EXTI2_IRQHandler	8	static
+EXTI.c:232:6:EXTI3_IRQHandler	8	static
+EXTI.c:237:6:EXTI4_IRQHandler	8	static
+EXTI.c:242:6:EXTI9_5_IRQHandler	8	static
+EXTI.c:250:6:EXTI15_10_IRQHandler	8	static

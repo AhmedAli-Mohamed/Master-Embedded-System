@@ -1,0 +1,8 @@
+GPIO.c:11:9:GET_POS	24	static
+GPIO.c:32:6:MCAL_GPIO_INIT	32	static
+GPIO.c:80:6:MCAL_GPIO_DEINIT	16	static
+GPIO.c:114:9:MCAL_GPIO_Readpin	24	static
+GPIO.c:128:10:MCAL_GPIO_Readport	24	static
+GPIO.c:144:6:MCAL_GPIO_Writepin	16	static
+GPIO.c:165:6:MCAL_GPIO_Writeport	16	static
+GPIO.c:180:6:MCAL_GPIO_Togglepin	16	static
