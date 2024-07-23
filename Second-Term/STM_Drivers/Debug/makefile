@@ -12,6 +12,7 @@ RM := rm -rf
 -include stm32f103x6_Drivers/subdir.mk
 -include Startup/subdir.mk
 -include Src/subdir.mk
+-include HAL/subdir.mk
 -include subdir.mk
 -include objects.mk
 

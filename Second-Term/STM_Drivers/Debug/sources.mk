@@ -19,6 +19,7 @@ OBJCOPY_BIN :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+HAL \
 Src \
 Startup \
 stm32f103x6_Drivers \

@@ -30,29 +30,42 @@
 
 //GPIO
 //A,B fully included in LQFP48
-#define GPIOA_BASE 	0x40010800UL
-#define GPIOB_BASE 	0x40010C00UL
+#define GPIOA_BASE 		0x40010800UL
+#define GPIOB_BASE 		0x40010C00UL
 
 //C,D partially included in LQFP48
-#define GPIOC_BASE 	0x40011000UL
-#define GPIOD_BASE 	0x40011400UL
+#define GPIOC_BASE 		0x40011000UL
+#define GPIOD_BASE 		0x40011400UL
 
 //E,F,G not included in LQFP48
-#define GPIOE_BASE 	0x40011800UL
-#define GPIOF_BASE 	0x40011C00UL
-#define GPIOG_BASE 	0x40012000UL
+#define GPIOE_BASE 		0x40011800UL
+#define GPIOF_BASE 		0x40011C00UL
+#define GPIOG_BASE 		0x40012000UL
 
 //AFIO
-#define AFIO_BASE 	0x40010000UL
+#define AFIO_BASE 		0x40010000UL
 
 
 //EXTI
-#define EXTI_BASE 	0x40010400UL
+#define EXTI_BASE 		0x40010400UL
 
 //RCC
-#define RCC_BASE 	0x40021000UL
+#define RCC_BASE 		0x40021000UL
+
+//USART
+#define USART1_BASE		0x40013800UL
+#define USART2_BASE		0x40004400UL
+#define USART3_BASE		0x40004800UL
 
 
+//SPI
+#define SPI1_BASE		0x40013000UL
+#define SPI2_BASE		0x40003800UL
+
+
+//I2C
+#define I2C1_BASE		0x40005400UL
+#define I2C2_BASE		0x40005800UL
 
 //-------------------------------------------------
 // IVT
@@ -73,6 +86,12 @@
 #define       EXTI13_IRQ			40
 #define       EXTI14_IRQ			40
 #define       EXTI15_IRQ			40
+#define 	  SPI1_IRQ				35
+#define 	  SPI2_IRQ				36
+#define 	  I2C1_EV_IRQ			31
+#define 	  I2C1_ER_IRQ			32
+#define 	  I2C2_EV_IRQ			33
+#define 	  I2C2_ER_IRQ			34
 
 //==================================================
 //Peripheral register:
@@ -92,6 +111,7 @@ typedef struct
 	uint32_t LCKR;
 }GPIO_TYPEDEF;
 
+
 //-*-*-*-*-*-*-*-*-*-*-*
 //   AFIO REGISTERS
 //-*-*-*-*-*-*-*-*-*-*-*-
@@ -104,6 +124,7 @@ typedef struct
 	uint32_t RESERVED;
 	uint32_t MAPR2;
 }AFIO_TYPEDEF;
+
 
 //-*-*-*-*-*-*-*-*-*-*-*
 //  EXTI REGISTERS
@@ -120,9 +141,11 @@ typedef struct
 
 }EXTI_TYPEDEF;
 
+
 //-*-*-*-*-*-*-*-*-*-*-*
 //  RCC REGISTERS
 //-*-*-*-*-*-*-*-*-*-*-*-
+
 typedef struct
 {
 	uint32_t CR;
@@ -136,20 +159,86 @@ typedef struct
 	uint32_t BDCR;
 }RCC_TYPEDEF;
 
+
+//-*-*-*-*-*-*-*-*-*-*-*
+//  USART REGISTERS
+//-*-*-*-*-*-*-*-*-*-*-*-
+
+typedef struct
+{
+	uint32_t SR;
+	uint32_t DR;
+	uint32_t BRR;
+	uint32_t CR1;
+	uint32_t CR2;
+	uint32_t CR3;
+	uint32_t GTPR;
+}USART_TYPEDEF;
+
+
+//-*-*-*-*-*-*-*-*-*-*-*
+//  SPI REGISTERS
+//-*-*-*-*-*-*-*-*-*-*-*-
+typedef struct
+{
+	uint32_t CR1;
+	uint32_t CR2;
+	uint32_t SR;
+	uint32_t DR;
+	uint32_t CRCPR;
+	uint32_t RXCRCR;
+	uint32_t TXCRCR;
+	uint32_t I2SCFGR;
+	uint32_t I2SPR;
+
+}SPI_TYPEDEF;
+
+
+//-*-*-*-*-*-*-*-*-*-*-*
+//  I2C REGISTERS
+//-*-*-*-*-*-*-*-*-*-*-*-
+typedef struct
+{
+	uint32_t CR1;
+	uint32_t CR2;
+	uint32_t OAR1;
+	uint32_t OAR2;
+	uint32_t DR;
+	uint32_t SR1;
+	uint32_t SR2;
+	uint32_t CCR;
+	uint32_t TRISE;
+
+}I2C_TYPEDEF;
+
 //==================================================
 //Peripheral Instants:
 //GPIO
-#define GPIOA 		((GPIO_TYPEDEF *) GPIOA_BASE )
-#define GPIOB 		((GPIO_TYPEDEF *) GPIOB_BASE )
-#define GPIOC 		((GPIO_TYPEDEF *) GPIOC_BASE )
-#define GPIOD 		((GPIO_TYPEDEF *) GPIOD_BASE )
+#define GPIOA 			((GPIO_TYPEDEF *) GPIOA_BASE )
+#define GPIOB 			((GPIO_TYPEDEF *) GPIOB_BASE )
+#define GPIOC 			((GPIO_TYPEDEF *) GPIOC_BASE )
+#define GPIOD 			((GPIO_TYPEDEF *) GPIOD_BASE )
 //AFIO
-#define AFIO 		((AFIO_TYPEDEF *) AFIO_BASE  )
+#define AFIO 			((AFIO_TYPEDEF *) AFIO_BASE  )
 //EXTI
-#define EXTI		((EXTI_TYPEDEF *) EXTI_BASE  )
+#define EXTI			((EXTI_TYPEDEF *) EXTI_BASE  )
 
 //RCC
-#define RCC			((RCC_TYPEDEF *)  RCC_BASE   )
+#define RCC				((RCC_TYPEDEF *)  RCC_BASE   )
+
+//USART
+#define USART1			((USART_TYPEDEF *)  USART1_BASE   )
+#define USART2			((USART_TYPEDEF *)  USART2_BASE   )
+#define USART3			((USART_TYPEDEF *)  USART3_BASE   )
+
+//SPI
+#define SPI1			((SPI_TYPEDEF *)  SPI1_BASE   )
+#define SPI2			((SPI_TYPEDEF *)  SPI2_BASE   )
+
+
+//I2C
+#define I2C1			((I2C_TYPEDEF *)  I2C1_BASE   )
+#define I2C2			((I2C_TYPEDEF *)  I2C2_BASE   )
 
 
 //============================================================
@@ -165,7 +254,18 @@ typedef struct
 
 #define CLOCK_ENABLE_AFIO   RCC->APB2ENR |= (1<<0)
 
+//USART
+#define CLOCK_ENABLE_USART1   RCC->APB2ENR |= (1<<14)
+#define CLOCK_ENABLE_USART2   RCC->APB1ENR |= (1<<17)
+#define CLOCK_ENABLE_USART3   RCC->APB1ENR |= (1<<18)
 
+//SPI
+#define CLOCK_ENABLE_SPI1   RCC->APB2ENR |= (1<<12)
+#define CLOCK_ENABLE_SPI2   RCC->APB1ENR |= (1<<14)
+
+//I2C
+#define CLOCK_ENABLE_I2C1   RCC->APB1ENR |= (1<<21)
+#define CLOCK_ENABLE_I2C2   RCC->APB1ENR |= (1<<22)
 
 //-*-*-*-*-*-*-*-*-*-*-*
 // NVIC ENABLE / DISABLE MACROS
@@ -186,6 +286,38 @@ typedef struct
 #define NVIC_EXTI4_DISABLE				(NVIC_ICER0 |= (1<<10))
 #define NVIC_EXTI5_EXTI9_DISABLE		(NVIC_ICER0 |= (1<<23))
 #define NVIC_EXTI10_EXTI15_DISABLE	    (NVIC_ICER1 |= (1<<8))
+
+//USART
+#define NVIC_USART1_ENABLE				(NVIC_ISER1 |= (1<<(37-32)))
+#define NVIC_USART2_ENABLE				(NVIC_ISER1 |= (1<<(38-32)))
+#define NVIC_USART3_ENABLE				(NVIC_ISER1 |= (1<<(39-32)))
+
+
+#define NVIC_USART1_DISABLE				(NVIC_ICER1 |= (1<<(37-32)))
+#define NVIC_USART2_DISABLE				(NVIC_ICER1 |= (1<<(38-32)))
+#define NVIC_USART3_DISABLE				(NVIC_ICER1 |= (1<<(39-32)))
+
+
+//SPI
+#define NVIC_SPI1_ENABLE				(NVIC_ISER1 |= (1<<(SPI1_IRQ - 32)))
+#define NVIC_SPI2_ENABLE				(NVIC_ISER1 |= (1<<(SPI2_IRQ - 32)))
+
+
+#define NVIC_SPI1_DISABLE				(NVIC_ICER1 |= (1<<(SPI1_IRQ -  32)))
+#define NVIC_SPI2_DISABLE				(NVIC_ICER1 |= (1<<(SPI2_IRQ - 32)))
+
+
+//I2C
+#define NVIC_I2C1_EV_ENABLE				(NVIC_ISER0 |= (1<<(I2C1_EV_IRQ )))
+#define NVIC_I2C1_ER_ENABLE				(NVIC_ISER1 |= (1<<(I2C1_ER_IRQ - 32)))
+#define NVIC_I2C2_EV_ENABLE				(NVIC_ISER1 |= (1<<(I2C2_EV_IRQ - 32)))
+#define NVIC_I2C2_ER_ENABLE				(NVIC_ISER1 |= (1<<(I2C2_ER_IRQ - 32)))
+
+#define NVIC_I2C1_EV_DISABLE			(NVIC_ICER0 |= (1<<(I2C1_EV_IRQ)))
+#define NVIC_I2C1_ER_DISABLE			(NVIC_ICER1 |= (1<<(I2C1_ER_IRQ - 32)))
+#define NVIC_I2C2_EV_DISABLE			(NVIC_ICER1 |= (1<<(I2C2_EV_IRQ -  32)))
+#define NVIC_I2C2_ER_DISABLE			(NVIC_ICER1 |= (1<<(I2C2_ER_IRQ - 32)))
+
 
 //-*-*-*-*-*-*-*-*-*-*-*-
 //Generic Macros:

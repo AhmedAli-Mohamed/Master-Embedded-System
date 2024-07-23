@@ -53,7 +53,7 @@ void MCAL_GPIO_INIT(GPIO_TYPEDEF* GPIOX , GPIO_PINCONFIG* pinconf)
 
 	else // if mode is GPIO_MODE_INPUT_PU or GPIO_MODE_INPUT_PD
 	{
-		pin = (((GPIO_MODE_INPUT_PU)<<2) & (0x0f));
+		pin = (((0b10)<<2) & (0x0f));
 
 		if (pinconf->MODE == GPIO_MODE_INPUT_PU )
 		{

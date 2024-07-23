@@ -18,35 +18,33 @@
  */
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
+#warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
 #include"stm32f103x6.h"
 #include"GPIO.h"
 #include"EXTI.h"
-void GPIO_init()
-{
+#include"LCD.h"
+#include"KEYPAD.h"
+#include "USART.h"
+#include "SPI.h"
+#include"I2C_EEPROM.h"
+
+int num1=0;
+int num2=0;
+int  flag2=0;
+int flag=0;
+int mode = 0;
 
 
-	//PA.1 as input floating
-	GPIO_PINCONFIG pin_conf;
-	pin_conf.Pin_Number = 1;
-	pin_conf.MODE = GPIO_MODE_INPUT_FLO;
-	MCAL_GPIO_INIT(GPIOA, &pin_conf);
-
-	//PB.1 as output push pull
-	pin_conf.Pin_Number = 1;
-	pin_conf.MODE = GPIO_MODE_OUTPUT_PP;
-	pin_conf.Speed = GPIO_SPEED_10M ;
-	MCAL_GPIO_INIT(GPIOB,&pin_conf);
-
-
-	//PB.13 as output push pull
-	pin_conf.Pin_Number = 13;
-	pin_conf.MODE = GPIO_MODE_OUTPUT_PP;
-	pin_conf.Speed = GPIO_SPEED_10M ;
-	MCAL_GPIO_INIT(GPIOB, &pin_conf);
-}
+void setNum(int n);
+void sum();
+void mul();
+void dev();
+void sub();
+void checknum(char x);
+//#define MCU_ACT_AS_MASTER
+#define MCU_ACT_AS_SLAVE
 
 
 void delay(int m)
@@ -54,29 +52,183 @@ void delay(int m)
 	int i;
 	for(i=0;i< m * 255;i++);
 }
-void EXTI13_CALLBACK(void)
+
+
+unsigned char buff;
+
+//USART CALL BACK
+void UART_CALLBACK(void)
 {
-	MCAL_GPIO_Togglepin(GPIOB,13);
+#ifdef  MCU_ACTas_MASTER
+	MCAL_USART_RECIEVE_DATA(USART1,  & buff, disable);
+	MCAL_USART_SEND_DATA(USART1,  & buff, enable);
+	//SEND DATA BY SPI
+	MCAL_GPIO_Writepin(GPIOA, GPIO_PIN_4, 0);
+	MCAL_SPI_SEND_RECIEVE_DATA(SPI1, & buff, enable);
+	MCAL_GPIO_Writepin(GPIOA, GPIO_PIN_4, 1);
+#endif
 }
 
 
+//SPICALLBACK
+void SPI_CALLBACK (S_IRQ_SRC irq_src)
+{
+	if(irq_src.RXNE)
+	{
+		MCAL_SPI_SEND_RECIEVE_DATA(SPI1, & buff, disable);
+		MCAL_USART_SEND_DATA(USART1,  & buff, enable);
+	}
+}
+
 int main(void)
 {
-   CLOCK_ENABLE_GPIOA;
-   CLOCK_ENABLE_GPIOB;
-   CLOCK_ENABLE_AFIO;
-   GPIO_init();
-   EXTI_PIN_CONFIG EXTI_PIN;
-   EXTI_PIN.EXTI_PIN = EXTI13PA13;
-   EXTI_PIN.IR_EN = IR_ENABLE;
-   EXTI_PIN.Trigger_MODE = EXTI_TRMODE_RISING;
-   EXTI_PIN.P_IRQ_CALLBACK = EXTI13_CALLBACK;
-   MCAL_EXTI_INIT(&EXTI_PIN);
+	GPIO_PINCONFIG pinconf;
+	CLOCK_ENABLE_GPIOA;
+	CLOCK_ENABLE_GPIOB;
+	CLOCK_ENABLE_AFIO;
+	LCD_INIT();
+	LCD_CLEAR_SCREEN();
+	KEYPAD_INIT();
+
+
+uint8_t x ;
 
 
 
 	while(1)
 	{
-
+		if(KEYPAD_READ() != 0xff)
+		{
+			x= KEYPAD_READ();
+			LCD_SEND_CHAR(x);
+			checknum(x);
+		}
 	}
 }
+
+void checknum(char x)
+{
+	if ( x == '+' &&  (flag==0 || flag2==1))
+	{
+
+					flag=1;
+					flag2=0;
+					mode=4;
+
+
+	}
+	else if ( x == '/' &&  (flag==0 || flag2==1))
+	{
+							flag=1;
+							flag2=0;
+							mode=1;
+	}
+	else if ( x == '-' &&  (flag==0 || flag2==1))
+	{
+						flag=1;
+						flag2=0;
+						mode=3;
+	}
+	else if ( x == '*' &&  (flag==0 || flag2==1))
+	{
+								flag=1;
+								flag2=0;
+								mode=2;
+	}
+	else if (x == '=')
+	{
+					switch(mode)
+										{
+											case 1:
+											{
+												dev();
+												break;
+											}
+											case 2:
+											{
+												mul();
+												break;
+											}
+											case 3:
+											{
+												sub();
+												break;
+											}
+											case 4:
+											{
+												sum();
+												break;
+											}
+										}
+	}
+	else
+	{
+		setNum(x-48);
+	}
+
+}
+
+void setNum(int n)// متد مقدار دهی عملگرها
+{
+	// برای عملوند دوم
+    if(flag==1)
+    {
+		// اضافه کردن رقم جدید انتخاب شده به عنوان یکان جدید
+		// مثلا الان مقدار عملگر 1 است و کار بر دکمه 5 را وارد کرده
+		// در این حالت نتیجه میشود 15
+        num2=(num2)*10;
+        num2+=n;
+    }
+	// برای عملوند اول
+    else if(flag==0)
+    {
+		// اضافه کردن رقم جدید انتخاب شده به عنوان یکان جدید
+		// مثلا الان مقدار عملگر 1 است و کار بر دکمه 5 را وارد کرده
+		// در این حالت نتیجه میشود 15
+        num1=(num1)*10;
+        num1+=n;
+    }
+}
+
+void sum()// متد جمع
+{
+    int answer=num1+num2;
+    num1=answer;
+    num2=0;
+    LCD_CLEAR_SCREEN();
+    LCD_SEND_INT(answer);
+    flag2=1;
+}
+
+void mul()//متد ضرب
+{
+    int answer=num1*num2;
+    num2=0;
+    num1=answer;
+    LCD_CLEAR_SCREEN();
+    LCD_SEND_INT(answer);
+    flag2=1;
+}
+
+void dev()//متد تقسیم
+{
+    int answer=num1/num2;
+    num2=0;
+    LCD_CLEAR_SCREEN();
+    num1=answer;
+    LCD_SEND_INT(answer);
+    flag2=1;
+}
+
+void sub()// متد تفریق
+{
+    int answer=num1-num2;
+    num1=answer;
+    num2=0;
+    LCD_CLEAR_SCREEN();
+    LCD_SEND_INT(answer);
+    flag2=1;
+}
+
+
+
